@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# Start local development servers
+# Start local development servers with pipenv
 
 set -e
 
 echo "🚀 Starting Comic Generation Agent (Local Development)..."
+echo ""
 
 # Check if .env exists
 if [ ! -f ".env" ]; then
@@ -13,8 +14,8 @@ if [ ! -f ".env" ]; then
     exit 1
 fi
 
-# Check if backend venv exists
-if [ ! -d "backend/venv" ]; then
+# Check if backend .venv exists
+if [ ! -d "backend/.venv" ]; then
     echo "❌ Backend virtual environment not found!"
     echo "Please run ./setup-local.sh first"
     exit 1
@@ -31,7 +32,6 @@ fi
 cleanup() {
     echo ""
     echo "🛑 Stopping development servers..."
-    jobs
     if [ -n "$BACKEND_PID" ]; then
         kill $BACKEND_PID 2>/dev/null || true
     fi
@@ -45,10 +45,9 @@ cleanup() {
 trap cleanup SIGINT SIGTERM
 
 # Start backend
-echo "📝 Starting backend server..."
+echo "📝 Starting backend server with pipenv..."
 cd backend
-source venv/bin/activate
-uvicorn src.main:app --reload --host 0.0.0.0 --port 8000 &
+pipenv run dev &
 BACKEND_PID=$!
 cd ..
 

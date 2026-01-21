@@ -1,78 +1,53 @@
 #!/bin/bash
 
-# Local Development Setup Script
-# This script helps set up development environment using pyenv
+# Local Development Setup Script with pipenv
+# This script helps set up development environment using pipenv
 
 set -e
 
 echo "🚀 Setting up Comic Generation Agent for local development..."
 echo ""
 
-# Check if pyenv is installed
-if ! command -v pyenv &> /dev/null; then
-    echo "❌ pyenv is not installed!"
-    echo "Please install pyenv first:"
-    echo "  macOS: brew install pyenv"
-    echo "  Linux: Visit https://github.com/pyenv/pyenv#installation"
+# Check if pipenv is installed
+if ! command -v pipenv &> /dev/null; then
+    echo "❌ pipenv is not installed!"
+    echo "Please install pipenv first:"
+    echo "  pip install pipenv"
+    echo "  or"
+    echo "  brew install pipenv"
     echo ""
-    echo "After installing pyenv, restart your terminal and run this script again."
+    echo "After installing pipenv, restart your terminal and run this script again."
     exit 1
 fi
 
-echo "✅ pyenv is installed: $(pyenv --version)"
+echo "✅ pipenv is installed: $(pipenv --version)"
 echo ""
 
-# Install Python 3.12 if not already installed
-PYTHON_VERSION="3.12.0"
-if ! pyenv versions | grep -q "$PYTHON_VERSION"; then
-    echo "📦 Installing Python $PYTHON_VERSION..."
-    echo "   This may take a few minutes..."
-    pyenv install $PYTHON_VERSION
-else
-    echo "✅ Python $PYTHON_VERSION already installed"
-fi
-
-# Set local Python version
-echo ""
-echo "🔧 Setting Python $PYTHON_VERSION for this project..."
-pyenv local $PYTHON_VERSION
-echo "✅ Python version set to $(python --version)"
+# Check Python version
+echo "🔍 Checking Python version..."
+python3 --version
 echo ""
 
 # Setup backend
 echo "📝 Setting up backend..."
 cd backend
 
-# Create virtual environment
-if [ ! -d "venv" ]; then
-    echo "📦 Creating virtual environment..."
-    python -m venv venv
-    echo "✅ Virtual environment created"
+# Create .venv directory
+echo "🔧 Creating virtual environment with pipenv..."
+# Skip if venv already exists
+if [ ! -d ".venv" ]; then
+    pipenv install --dev
 else
     echo "✅ Virtual environment already exists"
+    pipenv install --dev
 fi
 
-# Activate virtual environment
-echo "🔧 Activating virtual environment..."
-source venv/bin/activate
-echo "✅ Virtual environment activated"
-
-# Verify Python version in venv
-echo "🔍 Python in venv: $(which python)"
-echo "🔍 Python version: $(python --version)"
-
-# Install dependencies
+echo "✅ Backend dependencies installed"
 echo ""
-echo "📦 Installing Python dependencies from requirements.txt..."
-echo "   This may take a few minutes..."
-pip install --upgrade pip
-pip install -r requirements.txt
-echo "✅ Python dependencies installed"
 
 cd ..
 
 # Setup frontend
-echo ""
 echo "📝 Setting up frontend..."
 cd frontend
 
@@ -115,11 +90,13 @@ mkdir -p backend/output backend/cache backend/logs
 echo ""
 echo "✅ Local development environment setup complete!"
 echo ""
-echo "To start the development servers:"
+echo "To start development servers:"
 echo ""
 echo "1. Backend (Terminal 1):"
 echo "   cd backend"
-echo "   source venv/bin/activate"
+echo "   pipenv run dev"
+echo "   # or:"
+echo "   pipenv shell"
 echo "   uvicorn src.main:app --reload --host 0.0.0.0 --port 8000"
 echo ""
 echo "2. Frontend (Terminal 2):"

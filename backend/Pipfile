@@ -1,0 +1,35 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "==0.115.0"
+uvicorn = {extras = ["standard"],version = "==0.32.0"}
+pydantic = "==2.9.2"
+pydantic-settings = "==2.6.0"
+python-multipart = "==0.0.12"
+python-dotenv = "==1.0.1"
+pyyaml = "==6.0.2"
+openai = "==1.54.3"
+aiohttp = "==3.10.10"
+aiofiles = "==24.1.0"
+pillow = "==11.0.0"
+reportlab = "==4.2.5"
+httpx = "==0.27.2"
+tenacity = "==9.0.0"
+loguru = "==0.7.2"
+asyncpg = "==0.29.0"
+
+[dev-packages]
+pytest = "==8.3.3"
+pytest-asyncio = "==0.24.0"
+pytest-cov = "==6.0.0"
+
+[requires]
+python_version = "3.12"
+
+[scripts]
+dev = "uvicorn src.main:app --reload --host 0.0.0.0 --port 8000"
+test = "pytest tests/ -v"
+cli = "python -m src.cli"
