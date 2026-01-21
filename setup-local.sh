@@ -1,11 +1,12 @@
 #!/bin/bash
 
 # Local Development Setup Script
-# This script helps set up the development environment using pyenv
+# This script helps set up development environment using pyenv
 
 set -e
 
 echo "🚀 Setting up Comic Generation Agent for local development..."
+echo ""
 
 # Check if pyenv is installed
 if ! command -v pyenv &> /dev/null; then
@@ -13,24 +14,32 @@ if ! command -v pyenv &> /dev/null; then
     echo "Please install pyenv first:"
     echo "  macOS: brew install pyenv"
     echo "  Linux: Visit https://github.com/pyenv/pyenv#installation"
+    echo ""
+    echo "After installing pyenv, restart your terminal and run this script again."
     exit 1
 fi
+
+echo "✅ pyenv is installed: $(pyenv --version)"
+echo ""
 
 # Install Python 3.12 if not already installed
 PYTHON_VERSION="3.12.0"
 if ! pyenv versions | grep -q "$PYTHON_VERSION"; then
     echo "📦 Installing Python $PYTHON_VERSION..."
+    echo "   This may take a few minutes..."
     pyenv install $PYTHON_VERSION
 else
     echo "✅ Python $PYTHON_VERSION already installed"
 fi
 
 # Set local Python version
+echo ""
 echo "🔧 Setting Python $PYTHON_VERSION for this project..."
 pyenv local $PYTHON_VERSION
+echo "✅ Python version set to $(python --version)"
+echo ""
 
 # Setup backend
-echo ""
 echo "📝 Setting up backend..."
 cd backend
 
@@ -38,6 +47,7 @@ cd backend
 if [ ! -d "venv" ]; then
     echo "📦 Creating virtual environment..."
     python -m venv venv
+    echo "✅ Virtual environment created"
 else
     echo "✅ Virtual environment already exists"
 fi
@@ -45,11 +55,19 @@ fi
 # Activate virtual environment
 echo "🔧 Activating virtual environment..."
 source venv/bin/activate
+echo "✅ Virtual environment activated"
+
+# Verify Python version in venv
+echo "🔍 Python in venv: $(which python)"
+echo "🔍 Python version: $(python --version)"
 
 # Install dependencies
-echo "📦 Installing Python dependencies..."
+echo ""
+echo "📦 Installing Python dependencies from requirements.txt..."
+echo "   This may take a few minutes..."
 pip install --upgrade pip
 pip install -r requirements.txt
+echo "✅ Python dependencies installed"
 
 cd ..
 

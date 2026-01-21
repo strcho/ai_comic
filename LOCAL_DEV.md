@@ -23,7 +23,7 @@ pyenv install 3.12.0
 pyenv local 3.12.0
 
 # Verify
-python --version
+python3 --version
 ```
 
 ### 2. Create and Activate Virtual Environment
@@ -32,7 +32,7 @@ python --version
 cd backend
 
 # Create virtual environment
-python -m venv venv
+python3 -m venv venv
 
 # Activate on macOS/Linux
 source venv/bin/activate
