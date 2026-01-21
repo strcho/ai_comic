@@ -1,0 +1,33 @@
+server:
+  host: 0.0.0.0
+  port: 8000
+  cors_origins:
+    - http://localhost:5173
+    - http://localhost:3000
+  log_level: INFO
+
+openai:
+  api_key_env: OPENAI_API_KEY
+  model: gpt-4o-mini
+  image_model: dall-e-3
+  max_retries: 3
+  request_timeout: 120
+
+image_generation:
+  size: 1024
+  quality: standard
+  style: vivid
+
+cache:
+  enabled: true
+  ttl_seconds: 3600
+  directory: ./cache
+
+storage:
+  output_directory: ./output
+  database_url: sqlite:///./comics.db
+
+limits:
+  max_scenes: 5
+  min_scenes: 2
+  max_text_length: 5000
